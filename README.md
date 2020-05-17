@@ -39,7 +39,5 @@ pip install -r readme/requirements.txt <br>
 ![其余界面](https://github.com/fxtxkktv/lnmDNS/blob/master/readme/dns_domain.jpg)
 ### 智能DNS
 ![其余界面](https://github.com/fxtxkktv/lnmDNS/blob/master/readme/dns_aidns.jpg)
-### 帮助页面
-![其余界面](https://github.com/fxtxkktv/lnmDNS/blob/master/readme/help.jpg)
 ### 支持捐赠
 ![其余界面](https://github.com/fxtxkktv/lnmDNS/blob/master/readme/pay.jpg)
