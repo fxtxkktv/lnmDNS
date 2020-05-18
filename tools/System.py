@@ -320,8 +320,13 @@ def do_delrecord(id):
 
 @route('/delaidns/<id>')
 @checkAccess
-def do_deldomain(id):
+def do_delaidns(id):
     s = request.environ.get('beaker.session')
+    sql = """ select count(*) as count from dns_records where view=(select setname from dns_ipset where id=%s) """
+    resultx = readDb(sql,(id,))
+    if resultx[0].get('count') > 0 :
+       msg = {'color':'red','message':u'无法删除，该地址库已被关联使用'}
+       return template('aidns',session=s,msg=msg)
     sql_1 = """ delete from dns_ipset where id=%s """
     result = writeDb(sql_1,(id,))
     if result == True:
@@ -437,7 +442,7 @@ def add_aidns():
     sql_1 = """ INSERT INTO dns_ipset (setname,setdesc,setdata,utime,setfrom,status) VALUES (%s,%s,%s,%s,2,1)"""
     result = writeDb(sql_1,(setname,setdesc,setdata,utime))
     if result == True:
-       writeDNSconf('uptconf')
+       writeDNSconf(action='uptconf')
        msg = {'color':'green','message':'新增成功'}
        return 0
        #return template('aidns',session=s,msg=msg)
