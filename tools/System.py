@@ -404,7 +404,7 @@ def do_editrecord(id):
     if rtype == 'PTR' and netmod.checkip(data) == False :
        msg = {'color':'red','message':'数据格式错误'}
        return '-1'
-    sql = "update dns_records set zone=%s,host=%s,type=%s,mx_priority=%s,view=%s,data=%s,ttl,comment=%s where id=%s"
+    sql = "update dns_records set zone=%s,host=%s,type=%s,mx_priority=%s,view=%s,data=%s,ttl=%s,comment=%s where id=%s"
     data = (zone,host,rtype,mx_priority,view,Formatdata(data),ttl,comment,id)
     result = writeDb(sql,data)
     if result == True:
