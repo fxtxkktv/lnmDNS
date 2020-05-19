@@ -167,6 +167,7 @@ $(function(){
         $('#modalTitle').html('添加用户');
         $('#hidInput').val('0');
         $('#myModal').modal('show');
+        document.getElementById("username").readOnly=false;
         $('#modalForm')[0].reset();
         isEdit = 0;
     });

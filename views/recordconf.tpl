@@ -89,7 +89,7 @@
                </div>
                <div class="form-group" id="a_push">
                   <label class="control-label" for="inputSuccess1">DDNS自动更新：</label>
-                  <select id="view" style="width:100%;" name="autoupdate">
+                  <select id="autoupdate" style="width:100%;" name="autoupdate">
                     <option value='0'>关闭</option>
                     <option value='1'>开启</option>
                  </select>
@@ -241,6 +241,7 @@ $(function(){
         $('#modalTitle').html('添加记录');
         $('#hidInput').val('0');
         $('#myModal').modal('show');
+        document.getElementById("host").readOnly=false;
         $('#modalForm')[0].reset();
         isEdit = 0;
     });
@@ -273,6 +274,7 @@ $(function(){
                 $('#view').val(result[0]['view']);
                 $('#data').val(result[0]['data']);
                 $('#ttl').val(result[0]['ttl']);
+                $('#autoupdate').val(result[0]['autoupdate']);
                 $('#comment').val(result[0]['comment']);
                 $('#myModal').modal('show');
                 $('#rtype').click();
@@ -291,6 +293,7 @@ $(function(){
            var view = $('#view').val();
            var data = $('#data').val();
            var ttl = $('#ttl').val();
+           var autoupdate = $('#autoupdate').val();
            var comment = $('#comment').val();
            var postUrl;
            if(isEdit==1){
@@ -299,7 +302,7 @@ $(function(){
                 postUrl = "/addrecord";          //添加路径
            }
 
-           $.post(postUrl,{zone:zone,host:host,rtype:rtype,mx_priority:mx_priority,view:view,data:data,ttl:ttl,comment:comment},function(data){
+           $.post(postUrl,{zone:zone,host:host,rtype:rtype,mx_priority:mx_priority,view:view,data:data,ttl:ttl,autoupdate:autoupdate,comment:comment},function(data){
                   if(data==0){
                     $('#myModal').modal('hide');
                     $('#myLoadTable').bootstrapTable('refresh');

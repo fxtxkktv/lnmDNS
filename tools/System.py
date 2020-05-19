@@ -354,6 +354,8 @@ def do_addrecord():
     rtype = request.forms.get("rtype")
     view = request.forms.get("view")
     data = request.forms.get("data").strip('.')
+    ttl = request.forms.get("ttl")
+    autoupdate = request.forms.get("autoupdate")
     comment = request.forms.get("comment")
     serial = time.strftime('%s',time.localtime(time.time()))
     if rtype == 'MX' :
@@ -373,8 +375,8 @@ def do_addrecord():
        msg = {'color':'red','message':'数据格式错误'}
        return '-1'
     #获取全局设置值
-    sql = "insert into dns_records (zone,host,type,mx_priority,view,data,comment,serial) VALUE (%s,%s,%s,%s,%s,%s,%s,%s)"
-    data = (zone,host,rtype,mx_priority,view,Formatdata(data),comment,serial)
+    sql = "insert into dns_records (zone,host,type,mx_priority,view,data,ttl,autoupdate,comment,serial) VALUE (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+    data = (zone,host,rtype,mx_priority,view,Formatdata(data),ttl,autoupdate,comment,serial)
     result = writeDb(sql,data)
     if result == True:
        return '0'
@@ -391,8 +393,8 @@ def do_editrecord(id):
     view = request.forms.get("view")
     data = request.forms.get("data").strip('.')
     ttl = request.forms.get("ttl")
+    autoupdate = request.forms.get("autoupdate")
     comment = request.forms.get("comment")
-    serial = time.strftime('%s',time.localtime(time.time()))
     if rtype == 'MX' :
        mx_priority = request.forms.get("mx_priority")
     else :
@@ -409,8 +411,8 @@ def do_editrecord(id):
     if rtype == 'PTR' and netmod.checkip(data) == False :
        msg = {'color':'red','message':'数据格式错误'}
        return '-1'
-    sql = "update dns_records set zone=%s,host=%s,type=%s,mx_priority=%s,view=%s,data=%s,ttl=%s,comment=%s where id=%s"
-    data = (zone,host,rtype,mx_priority,view,Formatdata(data),ttl,comment,id)
+    sql = "update dns_records set zone=%s,host=%s,type=%s,mx_priority=%s,view=%s,data=%s,ttl=%s,autoupdate=%s,comment=%s where id=%s"
+    data = (zone,host,rtype,mx_priority,view,Formatdata(data),ttl,autoupdate,comment,id)
     result = writeDb(sql,data)
     if result == True:
        return '0'
@@ -574,6 +576,36 @@ def delbackupset(filename):
        else:
           msg = {'color':'red','message':u'备份集删除失败'}
     return template('backupset',session=s,msg=msg)
+
+# DDNS动态更新
+@route('/wsapi')
+def wsapi():
+    import urlparse,urllib
+    s = request.environ.get('beaker.session')
+    odict = urlparse.parse_qs(urlparse.urlparse('wsapi?%s' % request.environ.get('QUERY_STRING')).query)
+    PassKey = AppServer().getConfValue('wsapi','token')
+
+    try:
+       if odict['token'][0] != PassKey :
+          msg = {'return':255,'message':'token id error...'}
+          return(template('wsapp.html',msg=msg,session=s))
+    except:
+       msg = {'return':256,'message':'token id error...'}
+       return(template('wsapp.html',msg=msg,session=s))
+
+    try:
+       if odict['otype'][0] == 'ddns':
+          sql = """ update dns_records set data=%s where zone=%s and host=%s and autoupdate='1' and status='1' """
+          result = writeDb(sql,(odict['data'][0],odict['zone'][0],odict['host'][0]))
+          if result == False:
+             msg = {'return':255,'message':'wsapi get error...'}
+          else:
+             msg = {'return':0,'message':result}
+       else:
+          msg = {'return':255,'message':'system not found otype .'}
+    except:
+       msg = {'return':0,'message':'system not found otype .'}
+    return(template('wsapp.html',msg=msg,session=s))
 
 @route('/api/getbackupsetinfo',method=['GET', 'POST'])
 @checkAccess
