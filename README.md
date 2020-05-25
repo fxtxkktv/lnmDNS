@@ -17,7 +17,7 @@ cd lnmDNS <br>
 进入virtualenv环境 <br>
 source venv/bin/activate <br>
 DNS服务: [安装lnmOS定制RPM包,可在主页资源包获取](https://github.com/fxtxkktv/fxtxkktv.github.io/tree/master/files/RPM组件包/) <br>
-yum install -i bind bind-sdb <br>
+yum -y install bind bind-sdb <br>
 安装Python程序扩展包 <br>
 pip install -r readme/requirements.txt <br>
 
