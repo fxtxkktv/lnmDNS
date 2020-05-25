@@ -23,7 +23,7 @@ pip install -r readme/requirements.txt <br>
 
 3. 创建数据库并恢复数据模版 <br>
 [创建数据库]: # mysql -u root -p -e "create database lnmdns" <br>
-[恢复数据模版]: # mysql -u root -p ftpdb < readme/db_schema.sql <br>
+[恢复数据模版]: # mysql -u root -p lnmdns < readme/db_schema.sql <br>
 [配置数据库连接及其他]: # vim config/config.ini <br>
 
 4. 正式运行程序 <br>
