@@ -11,7 +11,7 @@ curl -o - 'https://raw.githubusercontent.com/fxtxkktv/fxtxkktv.github.io/master/
 2. 获取主程序<br>
 git clone https://github.com/fxtxkktv/lnmDNS.git <br>
 进入程序目录 <br>
-cd lnmFTP <br>
+cd lnmDNS <br>
 创建程序独立运行Python环境 <br>
 /opt/Py27lnmos/bin/virtualenv -p /opt/Py27lnmos/bin/python venv <br>
 进入virtualenv环境 <br>
