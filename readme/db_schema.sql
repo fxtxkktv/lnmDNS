@@ -35,6 +35,7 @@ CREATE TABLE `dns_conf` (
   `retry` int(11) DEFAULT '3600' COMMENT '若辅助域名服务器更新数据失败，多长时间再试',
   `expire` int(11) DEFAULT '86400' COMMENT '若辅助域名服务器无法从主服务器上更新数据，原有的数据何时失效。',
   `minimum` int(11) DEFAULT '3600' COMMENT '设置被缓存的否定回答的存活时间',
+  `force_domain_dns` longtext,
   UNIQUE KEY `dns_domain` (`dns_domain`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -120,7 +121,7 @@ CREATE TABLE `logrecord` (
   `objtext` varchar(255) DEFAULT NULL,
   `objhost` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=477 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=479 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -152,7 +153,7 @@ CREATE TABLE `sysinfo` (
   `tim` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=132560 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=142400 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -193,7 +194,7 @@ CREATE TABLE `user` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-05-18 10:23:29
+-- Dump completed on 2020-05-25 12:04:37
 -- MySQL dump 10.13  Distrib 5.1.73, for redhat-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: lnmdns
@@ -231,7 +232,7 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-05-18 10:23:29
+-- Dump completed on 2020-05-25 12:04:37
 -- MySQL dump 10.13  Distrib 5.1.73, for redhat-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: lnmdns
@@ -269,7 +270,7 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-05-18 10:23:29
+-- Dump completed on 2020-05-25 12:04:37
 -- MySQL dump 10.13  Distrib 5.1.73, for redhat-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: lnmdns
@@ -294,7 +295,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `dns_conf` WRITE;
 /*!40000 ALTER TABLE `dns_conf` DISABLE KEYS */;
-INSERT INTO `dns_conf` VALUES ('lnmdns.com.','ns1.lnmdns.com.','ns2.lnmdns.com.','8.8.8.8,8.8.4.4',3600,60,1,'sa.lnmdns.com.',3600,1800,86400,3600);
+INSERT INTO `dns_conf` VALUES ('lnmdns.com.','ns1.lnmdns.com.','ns2.lnmdns.com.','8.8.8.8,8.8.4.4',3600,60,1,'sa.lnmdns.com.',3600,1800,86400,3600,'lnmos.com|8.8.8.8,8.8.4.4');
 /*!40000 ALTER TABLE `dns_conf` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -307,7 +308,7 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-05-18 10:23:29
+-- Dump completed on 2020-05-25 12:04:37
 -- MySQL dump 10.13  Distrib 5.1.73, for redhat-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: lnmdns
@@ -346,4 +347,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-05-18 10:23:29
+-- Dump completed on 2020-05-25 12:04:37

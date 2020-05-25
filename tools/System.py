@@ -129,7 +129,7 @@ def getapplog():
 def addservconf():
     """新增服务配置项"""
     s = request.environ.get('beaker.session')
-    sql = "select dns_domain,primary_dns,second_dns,dns_ttl,dns_min_ttl,relay_dns,resp_person,retry,refresh,expire,minimum,dns_dis_nn from dns_conf "
+    sql = "select dns_domain,primary_dns,second_dns,dns_ttl,dns_min_ttl,relay_dns,resp_person,retry,refresh,expire,minimum,dns_dis_nn,force_domain_dns from dns_conf "
     result = readDb(sql,)
     info=result[0]
     info['servstatus']=servchk('53')
@@ -152,37 +152,42 @@ def do_adddnsservconf():
     expire = request.forms.get("expire")
     minimum = request.forms.get("minimum")
     dns_dis_nn = request.forms.get("dns_dis_nn")
+    force_domain_dns = request.forms.get("force_domain_dns").replace('\r\n','\n').strip()
+    query_sql = " select dns_domain,primary_dns,second_dns,dns_ttl,dns_min_ttl,relay_dns,resp_person,retry,refresh,expire,minimum,dns_dis_nn,force_domain_dns from dns_conf "
     for ips in relay_dns.split(',') :
         if netmod.checkip(ips) == False:
            msg = {'color':'red','message':u'转发地址填写不合法，保存失败'}
-           sql = " select dns_domain,primary_dns,second_dns,dns_ttl,dns_min_ttl,relay_dns,resp_person,retry,refresh,expire,minimum,dns_dis_nn from dns_conf "
-           result = readDb(sql,)
+           result = readDb(query_sql,)
            info=result[0]
            info['servstatus']=servchk('53')
            return template('dnsservconf',session=s,msg=msg,info=info)
     if netmod.is_domain(dns_domain) == False or netmod.is_domain(primary_dns) == False or netmod.is_domain(second_dns) == False or netmod.is_domain(resp_person) == False :
        msg = {'color':'red','message':u'地址填写不合法，保存失败'}
-       sql = " select dns_domain,primary_dns,second_dns,dns_ttl,dns_min_ttl,relay_dns,resp_person,retry,refresh,expire,minimum,dns_dis_nn from dns_conf "
-       result = readDb(sql,)
+       result = readDb(query_sql,)
        info=result[0]
        info['servstatus']=servchk('53')
        return template('dnsservconf',session=s,msg=msg,info=info)
-    sql = " UPDATE dns_conf set dns_domain=%s,primary_dns=%s,second_dns=%s,dns_ttl=%s,dns_min_ttl=%s,relay_dns=%s,resp_person=%s,retry=%s,refresh=%s,expire=%s,minimum=%s,dns_dis_nn=%s "
-    data = (Formatdata(dns_domain),Formatdata(primary_dns),Formatdata(second_dns),dns_ttl,dns_min_ttl,relay_dns,Formatdata(resp_person),retry,refresh,expire,minimum,dns_dis_nn)
+    for obj in force_domain_dns.split('\n') :   
+        if netmod.is_domain(obj.split('|')[0]) == False or netmod.checkip(obj.split('|')[1].split(',')[0]) == False:
+           msg = {'color':'red','message':u'域名指定DNS转发解析语法错误，保存失败'}
+           result = readDb(query_sql,)
+           info=result[0]
+           info['servstatus']=servchk('53')
+           return template('dnsservconf',session=s,msg=msg,info=info)
+    sql = " UPDATE dns_conf set dns_domain=%s,primary_dns=%s,second_dns=%s,dns_ttl=%s,dns_min_ttl=%s,relay_dns=%s,resp_person=%s,retry=%s,refresh=%s,expire=%s,minimum=%s,dns_dis_nn=%s,force_domain_dns=%s "
+    data = (Formatdata(dns_domain),Formatdata(primary_dns),Formatdata(second_dns),dns_ttl,dns_min_ttl,relay_dns,Formatdata(resp_person),retry,refresh,expire,minimum,dns_dis_nn,force_domain_dns)
     result = writeDb(sql,data)
     if result == True :
        writeDNSconf(action='uptconf')
        msg = {'color':'green','message':u'配置保存成功'}
-       sql = " select dns_domain,primary_dns,second_dns,dns_ttl,dns_min_ttl,relay_dns,resp_person,retry,refresh,expire,minimum,dns_dis_nn from dns_conf " 
-       result = readDb(sql,)
+       result = readDb(query_sql,)
        info=result[0]
        time.sleep(1) #防止检测FTP服务状态时异常
        info['servstatus']=servchk('53')
        return template('dnsservconf',session=s,msg=msg,info=info)
     else :
        msg = {'color':'red','message':u'配置保存失败'}
-       sql = " select dns_domain,primary_dns,second_dns,dns_ttl,dns_min_ttl,relay_dns,resp_person,retry,refresh,expire,minimum,dns_dis_nn from dns_conf "
-       result = readDb(sql,)
+       result = readDb(query_sql,)
        info=result[0]
        info['servstatus']=servchk('53')
        return template('dnsservconf',session=s,msg=msg,info=info)
@@ -330,6 +335,7 @@ def do_delaidns(id):
     sql_1 = """ delete from dns_ipset where id=%s """
     result = writeDb(sql_1,(id,))
     if result == True:
+       writeDNSconf(action='uptconf')
        msg = {'color':'green','message':u'删除成功'}
        return template('aidns',session=s,msg=msg)
     else :

@@ -158,8 +158,13 @@
                                         value="0">关闭
                                 </option>
 			          </select>
-		    	</div>
-		    </div>
+                  </div>
+		       </div>
+               <div class="modal-body">
+                    <span class="input-group-addon" style="width:537px">域名指定DNS转发解析</span>
+                    <textarea id="force_domain_dns" name="force_domain_dns" onkeyup="this.value=this.value.replace(/[^\w\d.\|\-\,\/\\\n]/g,'')" placeholder="lnmdns|223.5.5.5,223.6.6.6" style="width:537px;height:100px;resize:vertical;">{{info.get('force_domain_dns','')}}</textarea>
+               </div>
+		       </div>
                     <div class="modal-footer">
                         <button type="submit" style="float:left" class="btn btn-primary">保存</button>
                     </div>
