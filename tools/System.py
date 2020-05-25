@@ -167,8 +167,9 @@ def do_adddnsservconf():
        info=result[0]
        info['servstatus']=servchk('53')
        return template('dnsservconf',session=s,msg=msg,info=info)
-    for obj in force_domain_dns.split('\n') :   
-        if netmod.is_domain(obj.split('|')[0]) == False or netmod.checkip(obj.split('|')[1].split(',')[0]) == False:
+    if force_domain_dns:
+       for obj in force_domain_dns.split('\n') :   
+        if netmod.is_domain(obj.split('|')[0]) == False or netmod.checkip(obj.split('|')[1].split(',')[0]) == False :
            msg = {'color':'red','message':u'域名指定DNS转发解析语法错误，保存失败'}
            result = readDb(query_sql,)
            info=result[0]
