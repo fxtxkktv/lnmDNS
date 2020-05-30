@@ -10,15 +10,22 @@ fi
 PATH=$PATH:$wkdir/sbin
 confdir="$wkdir/plugins/named"
 pidfile="$wkdir/plugins/named/run/named.pid"
-binpath=$(which named-sdb)
 
+which named-sdb >/dev/null 2>&1
+if [ $? -eq 0 ] ;then
+   binname="named-sdb"
+   binpath=$(which named-sdb)
+else
+   binname="named"
+   binpath=$(which named)
+fi
 
 case "$1" in
   start)
         echo -en "Starting DNSServer:\t\t"
         mkdir -p $confdir/log $confdir/run >/dev/null 2>&1
         $(which named-checkconf) $confdir/named.conf || (echo "check conf err" ; exit 1)
-        $wkdir/sbin/start-stop-daemon --start --background -m --pidfile $pidfile --exec $binpath -- -c $confdir/named.conf
+        $wkdir/sbin/start-stop-daemon --start --background -m --pidfile $pidfile --exec $binpath -- -n 1 -c $confdir/named.conf
         RETVAL=$?
         #echo
         if [ $RETVAL -eq 0 ] ;then
@@ -30,9 +37,11 @@ case "$1" in
   stop)
         echo -en "Stoping DNSServer:\t\t"
         #killall $binIIpath
-        $wkdir/sbin/start-stop-daemon --stop  --name named-sdb >/dev/null 2>&1
+        $wkdir/sbin/start-stop-daemon --stop  --name $binname >/dev/null 2>&1
         RETVAL=$?
-        #echo
+        if [ -f $pidfile ];then
+           kill -9 $(cat $pidfile) >/dev/null 2>&1
+        fi
         if [ $RETVAL -eq 0 ] ;then
            echo "Done..."
         else
