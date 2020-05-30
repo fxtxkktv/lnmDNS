@@ -100,7 +100,7 @@ $(function(){
           clickToSelect: true,
           smartDisplay: true,
           sortOrder: 'asc',
-          sortName: 'id',
+          sortName: 'domain',
           columns: [{
               field: 'bianhao',
               title: 'checkbox',      
