@@ -151,13 +151,13 @@ $(function(){
               title: '主机名',
               align: 'center',
               valign: 'middle',
-              sortable: false
+              sortable: true
           },{ 
               field: 'type',
               title: '记录类型',
               align: 'center',
               valign: 'middle',
-              sortable: false
+              sortable: true
           },{ 
               field: 'setdesc',
               title: '解析线路',

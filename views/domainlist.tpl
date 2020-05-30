@@ -119,7 +119,7 @@ $(function(){
               title: '域名名称',
               align: 'center',
               valign: 'middle',
-              sortable: false
+              sortable: true
           },{
               field: 'comment',
               title: '域名描述',
