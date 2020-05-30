@@ -20,6 +20,9 @@ else
    binpath=$(which named)
 fi
 
+# clear core.*
+rm -rf $confdir/run/core.* >/dev/null 2>&1
+
 case "$1" in
   start)
         echo -en "Starting DNSServer:\t\t"

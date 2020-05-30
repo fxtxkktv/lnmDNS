@@ -478,7 +478,8 @@ def add_aidns(id):
     sql_1 = """ UPDATE dns_ipset SET setname=%s,setdesc=%s,setdata=%s,utime=%s where id=%s"""
     result = writeDb(sql_1,(setname,setdesc,setdata,utime,id))
     if result == True:
-       msg = {'color':'green','message':'新增成功'}
+       writeDNSconf(action='uptconf')
+       msg = {'color':'green','message':'更新成功'}
        return 0
        #return template('aidns',session=s,msg=msg)
     else:
