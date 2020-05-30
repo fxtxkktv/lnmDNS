@@ -378,9 +378,6 @@ def do_addrecord():
     if rtype == 'A' and netmod.checkip(data) == False :
        msg = {'color':'red','message':'记录数据格式错误'}
        return '-1'
-    if rtype == 'PTR' and netmod.is_domain(data) == False :
-       msg = {'color':'red','message':'数据格式错误'}
-       return '-1'
     #获取全局设置值
     sql = "insert into dns_records (zone,host,type,mx_priority,view,data,ttl,autoupdate,comment,serial) VALUE (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
     data = (zone,host,rtype,mx_priority,view,Formatdata(data),ttl,autoupdate,comment,serial)

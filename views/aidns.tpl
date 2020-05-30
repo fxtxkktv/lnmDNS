@@ -62,7 +62,7 @@
                </div>
                <div class="form-group">
                   <label class="control-label" for="inputSuccess1">地址集合：</label>
-                  <textarea id="setdata" name="setdata" style="height:200px;width:100%;" ></textarea>
+                  <textarea id="setdata" name="setdata" style="height:200px;width:100%;" onkeyup="this.value=this.value.replace(/[^\d.\/\\\n]/g,'')" ></textarea>
               </div>
               <div class="form-group">
                   <input type="hidden" id="hidInput" value="">

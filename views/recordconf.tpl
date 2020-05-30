@@ -63,7 +63,7 @@
                     <option value='CNAME'>CNAME</option>
                     <option value='MX'>MX</option>
                     <option value='TXT'>TXT</option>
-                    <option value='PTR'>PTR</option>
+                    <!--option value='PTR'>PTR</option-->
                     <option value='NS'>NS</option>
                  </select>
                </div>
@@ -81,7 +81,7 @@
                </div>
                <div class="form-group">
                   <label class="control-label" for="inputSuccess1">记录值：</label>
-                  <input type="text" class="form-control" onkeyup="value=value.replace(/[^\w\.]/ig,'')" id="data" name="data" placeholder="" required>
+                  <input type="text" class="form-control" id="data" name="data" placeholder="" required>
                </div>
                <div class="form-group">
                   <label class="control-label" for="inputSuccess1">TTL：</label>
@@ -243,6 +243,7 @@ $(function(){
         $('#myModal').modal('show');
         document.getElementById("host").readOnly=false;
         $('#modalForm')[0].reset();
+        $('#rtype').click();
         isEdit = 0;
     });
 
@@ -279,6 +280,7 @@ $(function(){
                 $('#myModal').modal('show');
                 $('#rtype').click();
                 document.getElementById("host").readOnly=true;
+                $('#rtype').click();
                 editId = result[0]['id'];
                 isEdit = 1;
             }
